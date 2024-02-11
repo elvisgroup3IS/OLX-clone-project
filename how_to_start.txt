@@ -1,1 +1,0 @@
-run in 'python -m flask --app app.py run' in powershell or in other terminal 
