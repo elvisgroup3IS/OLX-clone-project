@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+
+
+{% block content %}
+<div id="signupPopup">
+    <div id="signupPopupContainer">
+        <form action="/close" class="closeSigninPopupDiv">
+            <button id="closeSigninPopup">&times;</button>
+        </form>
+        <div class="headingDiv">
+            <span class="heading">Sign up</span>
+            <br>
+            <span>Buy &amp; sell things easily with OLX.</span>
+        </div>
+        <div id="signupWarning"></div>
+        <form action="/register_action" method="POST" id="
+        ">
+            <input type="text" name="username" placeholder="Name.." id="signupName" required>
+            <input type="email" name="email" placeholder="Email.." id="signupEmail" required>
+            <input type="password" name="password" placeholder="Passowrd.." id="signupPw" required>
+            {% if message %}
+            <h5  id=mesage>{{ message }}</h5>
+            {% endif %}
+            <input type="submit" value="Sign up">
+        </form>
+        <p>Already have an account? <a href="{{ url_for('login') }}" id="signinBtn_2">Sign in</a></p>
+    </div>
+</div>
+
+{% endblock %}
