@@ -2,6 +2,7 @@ from datetime import  datetime
 import models
 from functions.hash_function import f_hash
 from functions.filter_functions import fetch_ads
+from functions.add_recognize_functions import add_recognize
 from setup import app,db
 from flask import render_template,redirect,url_for,request,session
 from flask_login import LoginManager , login_user, logout_user, login_required, current_user
@@ -67,16 +68,13 @@ def user_page():
 
 @app.route("/add_detail/<add_id>")
 def add_page(add_id: int): 
-    ad=models.BaseAdd.query.get(add_id)
-    if ad.category_type=="Компютър":
-        ad=models.Computer.query.get(add_id)
-    
+    base_ad=models.BaseAdd.query.get(add_id)
+    ad = add_recognize(base_ad)
     is_login=True
     try:
         username = session['username']
     except KeyError :
         is_login=False
-
     return render_template('ad_details.html',ad=ad,is_login=is_login)
 
 @app.route("/show_ad_list>")
@@ -103,13 +101,14 @@ def login_close():
 @app.route('/sell', methods=['POST','GET'])
 def sell_form():
     categories = ['Електроника', 'Облекло','Превозни средства','Работа','Недвижими имоти','Спорт']
+
     subcategories = {
         'Електроника': ['Компютри', 'Таблети', 'Аудио техника', 'Телефони', 'Телевизори', 'Домашна техника'],
         'Облекло': ['Дамско', 'Мъжко'],
         'Превозни средства': ['Автомобили', 'Мотоциклети'],
-        'Работа': ['Пълно работно време', 'Непълно работно време', 'Стажове', 'Работа от вкъщи'],
-        'Недвижими имоти': ['Апартаменти за продажба', 'Къщи за продажба', 'Апартаменти под наем', 'Къщи под наем', 'Земеделски имоти'],
-        'Спорт': ['Фитнес и тренировки', 'Спортни съоръжения', 'Велосипеди', 'Тенис и футбол'],
+        'Работа': ['Пълно работно време', 'Непълно работно време', 'Работа от вкъщи'],
+        'Недвижими имоти': ['Апартаменти за продажба', 'Къщи за продажба'],
+        'Спорт': ['Фитнес и тренировки', 'Спортни съоръжения', 'Велосипеди'],
     }
 
     cities = ['София', 'Пловдив', 'Варна', 'Бургас', 'Русе', 'Стара Загора', 'Плевен', 'Велико Търново', 'Смолян']
