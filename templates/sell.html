@@ -136,24 +136,6 @@
             </select>
             {% endif %}
 
-            {% if selected_subcategory == 'Мъжко' %}
-            <select class="sell_inp" name="men_clothing_type" required>
-                {% for subcategory, option in {
-                    'suits': 'Мъжки костюми',
-                    'shirts': 'Ризи',
-                    'pants': 'Панталони',
-                    'jeans': 'Дънки',
-                    'jackets': 'Якета',
-                    'sweaters': 'Пуловери',
-                    't-shirts': 'Тениски',
-                    'shorts': 'Шорти',
-                    'activewear': 'Спортно облекло',
-                    # Add more men's clothing types as needed
-                }.items() %}
-                    <option value="{{ subcategory }}">{{ option }}</option>
-                {% endfor %}
-            </select>
-            {% endif %}
 
             {% if selected_subcategory == 'Мъжко' %}
             <select class="sell_inp" name="men_clothing_type" required>
@@ -167,7 +149,6 @@
                     't-shirts': 'Тениски',
                     'shorts': 'Шорти',
                     'activewear': 'Спортно облекло',
-                    # Add more men's clothing types as needed
                 }.items() %}
                     <option value="{{ subcategory }}">{{ option }}</option>
                 {% endfor %}
@@ -175,7 +156,7 @@
             {% endif %}
 
             {% if selected_category == 'Превозни средства' %}
-            <select class="sell_inp" name="car_brand" required>
+            <select class="sell_inp" name="vehicle_brand" required>
                 {% for subcategory, option in  {
                     'audi': 'Audi',
                     'bmw': 'BMW',
@@ -187,66 +168,67 @@
                     'chevrolet': 'Chevrolet',
                     'nissan': 'Nissan',
                     'hyundai': 'Hyundai',
-                    # Add more car brands as needed
                 }.items() %}
                     <option value="{{ subcategory }}">{{ option }}</option>
                 {% endfor %}
             </select>
-            <input class="sell_inp"  type="date" name="year" placeholder="Година на пройзводсвто" >
+            <label for="year">Година на пройзводсвто:</label>
+            <input class="sell_inp"  type="date" name="year" >
             <input class="sell_inp"  name="power" placeholder="Мощност">
             {% endif %}
 
-            {% if selected_category == 'Автомобили' %}
+            {% if selected_subcategory == 'Автомобили' %}
+            <label for="coupe_type">Купе:</label>
             <select class="sell_inp" name="coupe_type" required>
                 {% for subcategory, option in  {
                     'two_door': 'Двуврати',
                     'three_door': 'Триврати',
                     'four_door': 'Четириврати',
-                    'hardtop': 'Хардтоп',
                     'convertible': 'Кабрио',
                     'grand_coupe': 'Голям купе',
                 }.items() %}
                     <option value="{{ subcategory }}">{{ option }}</option>
                 {% endfor %}
+            </select>
 
-                <select class="sell_inp" name="engine_type" required>
-                    {% for subcategory, option in  {
-                        'gasoline': 'Бензинов',
-                        'diesel': 'Дизелов',
-                        'hybrid': 'Хибриден',
-                        'electric': 'Електрически',
-                        'natural_gas': 'На природен газ',
-                    }.items() %}
-                        <option value="{{ subcategory }}">{{ option }}</option>
-                    {% endfor %}
+            <label for="engine_type">Двигател:</label>
+            <select class="sell_inp" name="engine_type" required>
+                {% for subcategory, option in  {
+                    'gasoline': 'Бензинов',
+                    'diesel': 'Дизелов',
+                    'hybrid': 'Хибриден',
+                    'electric': 'Електрически',
+                    'natural_gas': 'На природен газ',
+                }.items() %}
+                    <option value="{{ subcategory }}">{{ option }}</option>
+                {% endfor %}
+            </select>
 
-                <select class="sell_inp" name="transmission_type" required>
-                    {% for subcategory, option in  {
-                        'automatic': 'Автоматична',
-                        'manual': 'Ръчна',
-                        'semi_automatic': 'Полуавтоматична',
-                    }.items() %}
-                        <option value="{{ subcategory }}">{{ option }}</option>
-                    {% endfor %}
-
+            <label for="transmission_type">Трансмисия:</label>
+            <select class="sell_inp" name="transmission_type" required>
+                {% for subcategory, option in  {
+                    'automatic': 'Автоматична',
+                    'manual': 'Ръчна',
+                    'semi_automatic': 'Полуавтоматична',
+                }.items() %}
+                    <option value="{{ subcategory }}">{{ option }}</option>
+                {% endfor %}
             </select>
             
-            <input class="sell_inp"   name="model" placeholder="Модел" >
-
-            <input class="sell_inp"  name="power" placeholder="Мощност">
+            <input class="sell_inp"   name="car_model" placeholder="Модел" >
             {% endif %}
 
             {% if selected_subcategory == 'Мотоциклети' %}
+            <label for="motorcycle_type">Тип:</label>
             <select class="sell_inp" name="motorcycle_type" required>
                 {% for subcategory, option in {
-                    'harley_davidson': 'Harley-Davidson',
-                    'honda': 'Honda',
-                    'yamaha': 'Yamaha',
-                    'ducati': 'Ducati',
-                    'kawasaki': 'Kawasaki',
-                    'suzuki': 'Suzuki',
-                    'bmw_motorrad': 'BMW Motorrad',
-                    'triumph': 'Triumph',
+                    'tourer': 'Туристически',
+                    'sport': 'Спортен',
+                    'cruiser': 'Крузър',
+                    'offroad': 'Ендуро',
+                    'scooter': 'Скутер',
+                    'chopper': 'Чопър',
+                    'custom': 'Къстъм',
                 }.items() %}
                     <option value="{{ subcategory }}">{{ option }}</option>
                 {% endfor %}
@@ -274,10 +256,91 @@
                  <input class="sell_inp"  type="number"  name="salary" placeholder="Заплата" >
             {% endif %}
 
-            
+            {% if selected_subcategory == 'Велосипеди' %}
+                <input class="sell_inp"  type="number"  name="wheels_inches" placeholder="Размер на гумите в инчове" >
+            {% endif %}
+
+            {% if selected_category == 'Недвижими имоти' %}
+                <input class="sell_inp"  type="number"  name="square_meters" placeholder="Квадратура (кв.м)" >
+                <input class="sell_inp"  type="date"  name="construction_year" placeholder="Година на построяване" >
+        
+                <select class="sell_inp" name="furnishing" required>
+                    {% for subcategory, option in {
+                        'fully_furnished': 'Напълно обзаведен',
+                        'partially_furnished': 'Частично обзаведен',
+                        'unfurnished': 'Необзаведен'
+                    }.items() %}
+                        <option value="{{ subcategory }}">{{ option }}</option>
+                    {% endfor %}
+                </select>
+
+                <label for="furnishing">Вид отопление:</label>
+                <select class="sell_inp" name="furnishing" required>
+                    {% for subcategory, option in {
+                        'central_heating': 'Централно отопление',
+                        'electric_heating': 'Електрическо отопление',
+                        'gas_heating': 'Газово отопление',
+                        'air_conditioning': 'Климатична инсталация',
+                        'fireplace': 'Камин',
+                        'underfloor_heating': 'Подово отопление',
+                        'other': 'Друг вид отопление',
+                    }.items() %}
+                        <option value="{{ subcategory }}">{{ option }}</option>
+                    {% endfor %}
+                </select>
+
+                <select class="sell_inp" name="sale_or_rent" required>
+                    {% for subcategory, option in {
+                        'sale': 'Продажба',
+                        'rent': 'Наем',
+                    }.items() %}
+                        <option value="{{ subcategory }}">{{ option }}</option>
+                    {% endfor %}
+                </select>
+                {% endif %}
+
+                {% if selected_subcategory == 'Апартаменти' %}
+                    <label for="sale_or_rent">Вид апартамент:</label>
+                    <select class="sell_inp" name="apartment_type" required>
+                        {% for subcategory, option in {
+                            'studio': 'Студио',
+                            'one_bedroom': 'Едностаен',
+                            'two_bedroom': 'Двустаен',
+                            'three_bedroom': 'Тристаен',
+                            'penthouse': 'Пентхаус',
+                            'garsionier': 'Гарсиониера',
+                        }.items() %}
+                            <option value="{{ subcategory }}">{{ option }}</option>
+                        {% endfor %}
+                    </select>  
+                    <input class="sell_inp"  type="number"  name="floor" placeholder="На кой етаж" > 
+                {% endif %}
+
+                {% if selected_category == 'Спорт' %}
+                <label for="sale_or_rent">Вид спорт:</label>
+                <select class="sell_inp" name="sport_type" required>
+                    {% for subcategory, option in {
+                        'football': 'Футбол',
+                        'basketball': 'Баскетбол',
+                        'tennis': 'Тенис',
+                        'table_tennis': 'Масов тенис',
+                        'volleyball': 'Волейбол',
+                        'handball': 'Ръгби',
+                        'swimming': 'Плуване',
+                        'cycling': 'Колоездене',
+                        'boxing': 'Бокс'
+                    }.items() %}
+                        <option value="{{ subcategory }}">{{ option }}</option>
+                    {% endfor %}
+                </select> 
+                {% endif %}
+
+                {% if selected_subcategory == 'Къщи' %}
+                    <input class="sell_inp"  type="number"  name="house_height" placeholder="Брой етажи" >
+                {% endif %}
 
             <input  type="submit" value="Публикувай обява">
-
+            
         </form>
         {% endif %}
     </div>

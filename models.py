@@ -180,5 +180,5 @@ class SportFacilities(SportAdd):
     __tablename__='sport_facilities_add'
 
 class Bicycles(SportAdd):
-    __tablename__='biccles_add'
+    __tablename__='bicycles_add'
     wheels_inches = db.Column(db.Integer)

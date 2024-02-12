@@ -2,7 +2,7 @@ from datetime import  datetime
 import models
 from functions.hash_function import f_hash
 from functions.filter_functions import fetch_ads
-from functions.add_recognize_functions import add_recognize
+from functions.add_recognize_functions import add_recognize,create_add
 from setup import app,db
 from flask import render_template,redirect,url_for,request,session
 from flask_login import LoginManager , login_user, logout_user, login_required, current_user
@@ -24,7 +24,6 @@ def home():
         all_ads = fetch_ads(category)
     else:
         all_ads = fetch_ads()
-
     return render_template('home_page.html', all_ads=all_ads)
 
 
@@ -77,7 +76,7 @@ def add_page(add_id: int):
     else:
         is_saved=False
         is_current_user_add=False    
-    return render_template('ad_details.html',ad=ad,is_login=is_login,is_saved=is_saved,is_current_user_add=is_current_user_add)
+    return render_template('ad_details.html',ad=ad,is_login=is_login,is_save=is_saved,is_current_user_add=is_current_user_add)
 
 @app.route("/show_ad_list>")
 def add_list():
@@ -109,7 +108,7 @@ def sell_form():
         'Облекло': ['Дамско', 'Мъжко'],
         'Превозни средства': ['Автомобили', 'Мотоциклети'],
         'Работа': ['Пълно работно време', 'Непълно работно време', 'Работа от вкъщи'],
-        'Недвижими имоти': ['Апартаменти за продажба', 'Къщи за продажба'],
+        'Недвижими имоти': ['Апартаменти', 'Къщи'],
         'Спорт': ['Фитнес и тренировки', 'Спортни съоръжения', 'Велосипеди'],
     }
 
@@ -125,63 +124,10 @@ def sell_form():
 
 @app.route("/sell_action",methods=['GET', 'POST'])
 def sell_action():
-    title=request.form['title']
-    photos = [request.form[f'photo{i}'] for i in range(1, 4)]
-    description=request.form['description']
-    price=request.form['price']
-    location=request.form['location']
-    phone=request.form['phone']
     current_user = load_user(session['user_id'])
-    subcategory = request.form.get('subcategory')
-    category = request.form.get('category')
-    saves=0
-    ad_params = {
-        'title': title,
-        'content': description,
-        'item_price': price,
-        'location': location,
-        'created_at': datetime.now(),
-        'owner_id': current_user.id,
-        'contact_name': current_user.name,
-        'phone': phone,
-        'owner': current_user,
-        'photo1': photos[0],
-        'photo2': photos[1],
-        'photo3': photos[2],
-        'subcategory_type': subcategory,
-        'category_type': category,
-        'saves': saves,
-    }
-    if(subcategory == 'Компютри'):
-        type_pc=request.form['type_PC']
-        ad = models.Computer(ad_params,pc_type=type_pc)
-    elif(subcategory == 'Таблети'):
-        reader_type=request.form['type_PC']
-        ad = models.Tablet(ad_params,reader_type=reader_type)
-    elif subcategory == 'Телефони':
-        brand = request.form['brand']
-        ad = models.Phone(ad_params,phone_brand=brand) 
-    elif subcategory == 'Аудио техника':
-        type = request.form['brand']
-        ad = models.AudioEquipment(ad_params,type=type) 
-    elif subcategory == 'Телевизори':
-        inches = request.form['brand']
-        ad = models.Television(ad_params, inches) 
-    elif subcategory == 'Домашна техника':
-        house_appliance_type = request.form['house_appliance_type']
-        ad = models.HouseholdAppliance(ad_params, house_appliance_type) 
-    elif subcategory == 'Дамско':
-        women_clothing_type = request.form['women_clothing_types ']
-        ad = models.WomenClothing(ad_params, women_clothing_type) 
-    elif subcategory == 'Мъжко':
-        men_clothing_type = request.form['men_clothing_type']
-        ad = models.MenClothing(ad_params, men_clothing_type) 
-    elif category == 'Работа':
-        sector=request.form['work_sector']
-        salary =request.form['salary']
-        if subcategory == 'Пълно работно време':
-            ad = models.FullTime(ad_params, sector,salary) 
 
+    ad=create_add(request,current_user)
+    photos=[ad.photo1,ad.photo2,ad.photo3]
     db.session.close()
     images = [models.Image(url=photo,add_id=ad.id) for photo in photos]
     with db.session.begin():

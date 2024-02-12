@@ -1,4 +1,5 @@
 import models
+from datetime import  datetime
 
 def add_recognize(ad):
     add_id=ad.id
@@ -37,3 +38,116 @@ def add_recognize(ad):
         ad_subtype = models.Bicycles.query.get(add_id)
 
     return ad_subtype
+
+def create_add(request,current_user):
+    title=request.form['title']
+    photos = [request.form[f'photo{i}'] for i in range(1, 4)]
+    description=request.form['description']
+    price=request.form['price']
+    location=request.form['location']
+    phone=request.form['phone']
+    subcategory = request.form.get('subcategory')
+    category = request.form.get('category')
+    saves=0
+    ad_params = {
+        'title': title,
+        'content': description,
+        'item_price': price,
+        'location': location,
+        'created_at': datetime.now(),
+        'owner_id': current_user.id,
+        'contact_name': current_user.name,
+        'phone': phone,
+        'owner': current_user,
+        'photo1': photos[0],
+        'photo2': photos[1],
+        'photo3': photos[2],
+        'subcategory_type': subcategory,
+        'category_type': category,
+        'saves': saves,
+    }
+    if(subcategory == 'Компютри'):
+        type_pc=request.form['type_PC']
+        ad = models.Computer(**ad_params,pc_type=type_pc)
+    elif(subcategory == 'Таблети'):
+        reader_type=request.form['type_PC']
+        ad = models.Tablet(ad_params,reader_type=reader_type)
+    elif subcategory == 'Телефони':
+        brand = request.form['brand']
+        ad = models.Phone(ad_params,phone_brand=brand) 
+    elif subcategory == 'Аудио техника':
+        type = request.form['brand']
+        ad = models.AudioEquipment(ad_params,type=type) 
+    elif subcategory == 'Телевизори':
+        inches = request.form['brand']
+        ad = models.Television(ad_params, inches) 
+    elif subcategory == 'Домашна техника':
+        house_appliance_type = request.form['house_appliance_type']
+        ad = models.HouseholdAppliance(ad_params, house_appliance_type) 
+    elif subcategory == 'Дамско':
+        women_clothing_type = request.form['women_clothing_types ']
+        ad = models.WomenClothing(ad_params, women_clothing_type) 
+    elif subcategory == 'Мъжко':
+        men_clothing_type = request.form['men_clothing_type']
+        ad = models.MenClothing(ad_params, men_clothing_type) 
+    elif category == 'Работа':
+        sector=request.form['work_sector']
+        salary =request.form['salary']
+        if subcategory == 'Пълно работно време':
+            ad = models.FullTime(ad_params, sector,salary) 
+        elif subcategory == 'Непълно работно време':
+            ad = models.PartTime(ad_params, sector,salary) 
+        else :
+            ad = models.WorkFromHome(ad_params, sector,salary) 
+    elif category == 'Недвижими имоти':
+        square_meters = request.form['square_meters']
+        construction_year = request.form['construction_year']
+        furnishing = request.form['furnishing']
+        heating = request.form['heating']
+        sale_or_rent = request.form['work_sector']
+        ad_params+={ 
+            'square_meters': square_meters,
+            'furnishing': furnishing,
+            'construction_year': construction_year,
+            'heating': heating,
+            'sale_or_rent': sale_or_rent,
+        }
+        if subcategory == 'Апартаменти':
+            apartment_type = request.form['apartment_type']
+            floor = request.form['floor']
+            ad = models.ApartmentAdd(ad_params, apartment_type=apartment_type,floor=floor)
+        if subcategory == 'Къщи':
+            house_height = request.form['house_height']
+            ad = models.HouseAdd(ad_params, floors_height=house_height)
+    elif category == 'Спорт':
+        sport_type=request.form['sport_type']
+        if subcategory == 'Велосипеди':
+            wheels_inches = request.form["wheels_inches"]
+            ad = models.Bicycles(ad_params,sport_type=sport_type , wheels_inches=wheels_inches)
+    elif category == 'Превозни средства':
+        vehicle_brand = request.form['vehicle_brand']
+        year = request.form['year']
+        power = request.form['power']
+        ad_params+={ 
+            'vehicle_brand ': vehicle_brand ,
+            'year': year,
+            'power': power,
+        }
+        if subcategory == 'Автомобили':
+            coupe = request.form['coupe_type']
+            model = request.form['car_model']
+            engine = request.form['engine_type']
+            transmission = request.form['transmission_type']
+            ad_params+={ 
+                'coupe': coupe ,
+                'model': model,
+                'engine': engine,
+                'transmission': transmission,
+            }
+            ad = models.Motorcycle(ad_params,coupe=coupe,model = model,engine = engine,transmission = transmission)
+        else :
+            motor_type=request.form['motorcycle_type']
+            ad = models.Motorcycle(ad_params,motor_type=motor_type)
+
+    return ad
+

@@ -36,13 +36,16 @@
                 </div>
                 {% if is_login %}
                     <div class="sellerInfo">
-                        {% if is_save %}
+                        {% if not is_save %}
                         <form  method="post"  action="/save_add" >
                             <button id="save" name="save_addbtn" value="{{ad.id}}">Запази обявата</button>
                         </a>
-                        {% else %}
+                        {% endif %}
+                        
+                        {% if is_save %}
                         <div ><b>Обявата е запазена </b> !</div>
                         {% endif %}
+
                         {% if is_current_user_add %}
                         <div ><b>Обявата има {{ad.saves}} запазвания </b> !</div>
                         {% endif %}
