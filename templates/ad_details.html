@@ -5,7 +5,11 @@
 <div id="adDetailsPopup">
     <div id="adDetailsPopupContainer">
         <div class="closeAdDetailsPopupDiv">
-            <a href="{{ url_for('user_page') }}" id="closeAdDetailsPopup">&times;</a>
+            {% if is_login %}
+                <a href="{{ url_for('user_page') }}" id="closeAdDetailsPopup">&times;</a>
+            {% else %}
+                <a href="{{ url_for('home') }}" id="closeAdDetailsPopup">&times;</a>
+            {% endif %}
         </div>
         <div class="left">
             <div class="inLeft" id="AdDescAndImage">
@@ -31,7 +35,7 @@
                     <div id="devAction">Доставка : {{ ad.delivery_action }} </div>
                 </div>
                 <div class="sellerInfo">
-                    {% if ad not in current_user.favorite_adds and current_user %}
+                    {% if ad not in current_user.favorite_adds %}
                         {% if is_login %}
                         <form  method="post"  action="/save_add" >
                             <button id="save" name="save_addbtn" value="{{ad.id}}">Запази обявата</button>
@@ -47,36 +51,3 @@
     </div>
 </div>
 {% endblock %}
-
-<!-- Вашият HTML файл (ad_details.html) -->
-
-<!-- <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Детайли за обява</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/add_details.css') }}">
-</head>
-<body>
-    <div class="container">
-        <div class="ad-details">
-            <h2 class="ad-title">{{ ad.title }}</h2>
-            <p class="ad-info">{{ ad.content }}</p>
-            <p class="ad-info">Цена: {{ ad.item_price }} лв</p>
-            <!-- Добавете други информационни полета, които искате -->
-
-            {% if ad.images %}
-                <div class="image-gallery">
-                    {% for image in ad.images %}
-                        <img class="ad-image" src="{{ url_for('static', filename='addpictures/' + image.url) }}" alt="Снимка">
-                    {% endfor %}
-                </div>
-            {% else %}
-                <p>Няма налични снимки</p>
-            {% endif %}
-        </div>
-    </div>
-</body>
-</html> -->
