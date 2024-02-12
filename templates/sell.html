@@ -63,25 +63,20 @@
 
             {% if selected_subcategory == 'Компютри' %}
             <select class="sell_inp"  name="type_PC">
-                <!-- Добавете други категории по ваш избор -->
                 <option value="laptop">Лаптоп</option>
                 <option value="desktop">Настолен компютър</option>
             </select>
             {% endif %}
             
             {% if selected_subcategory == 'Таблети' %}
-            <!-- Генерирайте полета за въвеждане само ако е избрана категория "Електроника" -->
             <select class="sell_inp"  name="type_tablet">
-                <!-- Добавете други категории по ваш избор -->
                 <option value="tablet">Таблет</option>
                 <option value="reader">Електронен четец</option>
             </select>
             {% endif %}
 
             {% if selected_subcategory == 'Аудио техника' %}
-            <!-- Генерирайте полета за въвеждане само ако е избрана категория "Електроника" -->
             <select class="sell_inp"  name="type_aoudio" required>
-                <!-- Добавете други категории по ваш избор -->
                 <option value="speakers">Тонколони и усилватели</option>
                 <option value="headphones">Слушалки</option>
                 <option value="accessories">Аксесоари</option>
@@ -89,7 +84,6 @@
             {% endif %}
             
             {% if selected_subcategory == 'Домашна техника' %}
-            <!-- Генерирайте полета за въвеждане само ако е избрана категория "Електроника" -->
             <select class="sell_inp"  name="type_house_hold_appliance">
                 <option value="coffee_machines">Кафе машини</option>
                 <option value="vascular">Съдомиални</option>

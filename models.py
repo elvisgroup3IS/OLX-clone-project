@@ -34,7 +34,7 @@ class BaseAdd(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(255))
     content = db.Column(db.String(255))
-    item_price = db.Column(db.Float)  # Changed from db.Double to db.Float
+    item_price = db.Column(db.Float) 
     location = db.Column(db.String(50))
     contact_name = db.Column(db.String(50))
     phone = db.Column(db.String(15))
@@ -76,7 +76,7 @@ class Image(db.Model):
     url = db.Column(db.String(255))
     add_id = db.Column(db.Integer, db.ForeignKey('base_add.id'))
     add = db.relationship('BaseAdd', backref='images_add')
-    # асоциирана обява
+
 
 # Недвижими имоти
 class RealEstateAdd(BaseAdd):

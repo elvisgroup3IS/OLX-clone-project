@@ -74,7 +74,6 @@ def add_page(add_id: int):
     is_login=True
     try:
         username = session['username']
-        # Continue with your logic that uses the 'username'
     except KeyError :
         is_login=False
 
