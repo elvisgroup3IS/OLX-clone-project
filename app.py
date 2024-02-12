@@ -70,12 +70,14 @@ def user_page():
 def add_page(add_id: int): 
     base_ad=models.BaseAdd.query.get(add_id)
     ad = add_recognize(base_ad)
-    is_login=True
-    try:
-        username = session['username']
-    except KeyError :
-        is_login=False
-    return render_template('ad_details.html',ad=ad,is_login=is_login)
+    is_login=current_user.is_authenticated
+    if is_login:
+        is_saved=base_ad in current_user.favorite_adds
+        is_current_user_add= base_ad in current_user.ads
+    else:
+        is_saved=False
+        is_current_user_add=False    
+    return render_template('ad_details.html',ad=ad,is_login=is_login,is_saved=is_saved,is_current_user_add=is_current_user_add)
 
 @app.route("/show_ad_list>")
 def add_list():
@@ -203,8 +205,11 @@ def save_add():
 
     add = models.BaseAdd.query.get(add_id)
 
+
     if not add:
         abort(404, 'Ad not found')
+
+    add.saves+=1
 
     current_user.add_favorite_advert(add)
 
@@ -268,7 +273,7 @@ def search():
             all_ads = models.BaseAdd.query.filter(or_(models.BaseAdd.title.ilike(f"%{search_query}%"),
                                                        models.BaseAdd.content.ilike(f"%{search_query}%"))).all()
             result_string = f"Резултати за '{search_query}'"
-            if current_user : 
+            if current_user.is_authenticated: 
                 return render_template('user_page.html', all_ads=all_ads,category_title=result_string)
             else :
                 return render_template('home_page.html', all_ads=all_ads,category_title=result_string)
