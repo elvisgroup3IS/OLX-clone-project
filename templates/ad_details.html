@@ -47,7 +47,11 @@
                         {% endif %}
 
                         {% if is_current_user_add %}
-                        <div ><b>Обявата има {{ad.saves}} запазвания </b> !</div>
+                        <div ><b>Обявата има {{ad.saves}} запазвания !</b> </div>
+                        <form method="POST" action="/add_delete/{{ ad.id }}">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <button id="delete" name="delete_addbtn" value="{{ ad.id }}">Изтрий обявата</button>
+                        </form>
                         {% endif %}
                     </div>
                 {% endif %}

@@ -2,7 +2,7 @@ from datetime import  datetime
 import models
 from functions.hash_function import f_hash
 from functions.filter_functions import fetch_ads
-from functions.add_recognize_functions import add_recognize,create_add
+from functions import add_functions
 from setup import app,db
 from flask import render_template,redirect,url_for,request,session
 from flask_login import LoginManager , login_user, logout_user, login_required, current_user
@@ -57,18 +57,22 @@ def user_page():
     category = request.args.get('category')
     if category == 'user_ads':
         all_ads = current_user.ads
+        message="Вашите обяви"
     elif category == 'favorite_user_ads':
         all_ads = current_user.favorite_adds
+        message="Вашите любими обяви"
     elif category:
         all_ads = db.session.query(models.BaseAdd).filter_by(category_type=category)
+        message=f"Обяви в категория : {category} "
     else:
+        message="Всички обяви"
         all_ads = models.BaseAdd.query.all()
-    return render_template('user_page.html', all_ads=all_ads)
+    return render_template('user_page.html', all_ads=all_ads,message=message)
 
 @app.route("/add_detail/<add_id>")
 def add_page(add_id: int): 
     base_ad=models.BaseAdd.query.get(add_id)
-    ad = add_recognize(base_ad)
+    ad = add_functions.add_recognize(base_ad)
     is_login=current_user.is_authenticated
     if is_login:
         is_saved=base_ad in current_user.favorite_adds
@@ -78,10 +82,14 @@ def add_page(add_id: int):
         is_current_user_add=False    
     return render_template('ad_details.html',ad=ad,is_login=is_login,is_save=is_saved,is_current_user_add=is_current_user_add)
 
-@app.route("/show_ad_list>")
-def add_list():
-    all_ads=current_user.ads
-    return render_template('ad_list.html',all_ads=all_ads)
+@app.route('/add_delete/<add_id>',methods=['POST', 'DELETE'])
+@login_required
+def delete_add(add_id):
+    if request.form.get('_method') != 'DELETE':
+        return abort(400, 'Invalid method')
+    
+    add_functions.delete_add(add_id)
+    return redirect(url_for('user_page'))
 
 @app.route("/to_sell")
 def to_sell():
@@ -126,7 +134,7 @@ def sell_form():
 def sell_action():
     current_user = load_user(session['user_id'])
 
-    ad=create_add(request,current_user)
+    ad=add_functions.create_add(request,current_user)
     photos=[ad.photo1,ad.photo2,ad.photo3]
     db.session.close()
     images = [models.Image(url=photo,add_id=ad.id) for photo in photos]

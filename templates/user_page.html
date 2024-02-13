@@ -16,6 +16,12 @@
         </form>
 {% endblock %}
 
+{% block category_title %}
+    {% if message %}
+        <h2 id="categoryHeading">{{message}}</h2>
+    {% endif %}
+{% endblock %}
+
 {% block addlist %}
     <ul id="adList">
         {% for ad in all_ads %}
@@ -41,8 +47,3 @@
 <a href="{{ url_for('user_page', category='Облекло') }}" >Облекло</a>
 {% endblock %}
 
-{% block category_title %}
-    {% if category_title %}
-        <h2 id="categoryHeading">{{category_title}}</h2>
-    {% endif %}
-{% endblock %}

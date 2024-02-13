@@ -151,3 +151,14 @@ def create_add(request,current_user):
 
     return ad
 
+def get_add_by_id(add_id):
+    return models.db.session.query(models.BaseAdd).get(add_id)
+
+def delete_add(add_id):
+    add = get_add_by_id(add_id)
+    if add:
+        models.db.session.delete(add)
+        models.db.session.commit()
+        print(f"Record with ID {add_id} deleted successfully.")
+    else:
+        raise ValueError(f"Record with ID {add_id} not found.")
