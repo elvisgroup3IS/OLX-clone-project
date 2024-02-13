@@ -28,7 +28,7 @@
 ## Използване
 
 ```bash
-Add-Content -Path ".env" -Value "FLASK_SECRET_KEY='<yourSecretkey>'" 
+Add-Content -Path ".env" -Value "SECRET_KEY='<yourSecretkey>'" 
 # Заменете <yourSecretkey> с ключ по ваш избор
 ```
 
