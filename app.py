@@ -203,12 +203,7 @@ def register_action_action():
             error_message = "The email address is already in use. Please choose a different email."
         return redirect(url_for('register', message=error_message))
 
-    session_data = {'username': user_name, 'user_id': new_user.id}
-    session.update(session_data)
-
-    login_user(new_user)
-
-    return redirect(url_for('registration_success'))
+    return redirect(url_for('login', message='Succesfull registration ,please login in .'))
 
 @app.route("/search", methods=['GET', 'POST'])
 def search():
