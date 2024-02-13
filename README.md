@@ -29,8 +29,8 @@
 
 ```bash
 Add-Content -Path ".env" -Value "FLASK_SECRET_KEY='<yourSecretkey>'" 
+# Заменете <yourSecretkey> с ключ по ваш избор
 ```
-Заменете <yourSecretkey> с ключ по ваш избор
 
 ```bash
 python -m flask --app app.py run
