@@ -5,14 +5,14 @@
             <div class="dropdown">
                 <button id="signinBtn" class="showSignoutBtnHover">{{session['username']}}</button>
                 <div class="dropdownContent" id="dropdownContent">
-                    <a href="{{ url_for('user_page', category='user_ads') }}" id="myAds">My Ads</a>
-                    <a href="{{ url_for('user_page', category='favorite_user_ads') }}" id="favorites">Favorites</a>
-                    <a href="{{ url_for('logout') }}" id="signoutBtn">Sign out</a>
+                    <a href="{{ url_for('user_page', category='user_ads') }}" id="myAds">Мойте обяви</a>
+                    <a href="{{ url_for('user_page', category='favorite_user_ads') }}" id="favorites">Любими обяви</a>
+                    <a href="{{ url_for('logout') }}" id="signoutBtn">Излез от профиля</a>
                 </div>
             </div>
         </div>
         <form action="/to_sell" class="sellBtnDiv">
-            <button id="sellBtn">Sell</button>
+            <button id="sellBtn">Продай</button>
         </form>
 {% endblock %}
 
@@ -20,20 +20,26 @@
     {% if message %}
         <h2 id="categoryHeading">{{message}}</h2>
     {% endif %}
+    <div id="filterPopupContainer">
+    <form method="POST" action='/filter'>
+        {% if selected_category %}
+        <label for="subcategory">Подкатегория:</label>
+        <select class="sell_inp"  id="subcategory" name="subcategory" onchange="this.form.submit()">
+            <option value="" {% if not selected_subcategory %}selected{% endif %}>Избери подкатегория</option>
+            {% for subcategory in subcategories[selected_category] %}
+                <option value="{{ subcategory }}" {% if selected_subcategory == subcategory %}selected{% endif %}>{{ subcategory }}</option>
+            {% endfor %}
+        </select>
+        {% endif %}
+        <input class="sell_inp"  type="text" id="price" name="max_price" placeholder="Максимална цена." required>   
+        <button id="sellBtn" type="submit" name="get_subcategory" value='{{ subcategory }}'  >Приложи</button>
+    </form>
+    </div>
+
 {% endblock %}
 
 {% block addlist %}
-    <ul id="adList">
-        {% for ad in all_ads %}
-            <li class="adItemL">
-                <a href="{{ url_for('add_page', add_id=ad.id) }}">
-                    <h3 class="adTitleL">{{ ad.title }}</h3>
-                        <img class="adImageL" src="{{ url_for('static', filename='addpictures/' + ad.photo1) }}" alt="Обява 1">
-                    <p class="adInfoL">Добавена на: {{ ad.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</p>
-                </a>
-            </li>
-        {% endfor %}
-    </ul>
+    {% include 'ad_list.html' %}
 {% endblock %}
 
 

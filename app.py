@@ -1,7 +1,7 @@
 from datetime import  datetime
 import models
-from functions.hash_function import f_hash
-from functions.filter_functions import fetch_ads
+from functions import other_functions
+from functions import filter_functions 
 from functions import add_functions
 from setup import app,db
 from flask import render_template,redirect,url_for,request,session
@@ -9,27 +9,26 @@ from flask_login import LoginManager , login_user, logout_user, login_required, 
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy import or_
 from flask import abort
+import json
 
 login_manager=LoginManager(app)
 
 with app.app_context():
     db.create_all()
-# Home route
+
 @app.route("/")
 def home():
 
+    logout()
     category = request.args.get('category')
 
     if category:
-        all_ads = fetch_ads(category)
+        all_ads = filter_functions.fetch_ads(category)
     else:
-        all_ads = fetch_ads()
+        all_ads = filter_functions.fetch_ads()
     return render_template('home_page.html', all_ads=all_ads)
 
 
-@app.teardown_request
-def teardown_request(exception=None):
-    db.session.remove()
 
 
 @app.route("/login")
@@ -50,24 +49,43 @@ def register(message=None):
     message = request.args.get('message')
     return render_template('register.html', title='Login', message=message)
 
+@app.route("/filter",methods=['POST'])
+def filter():
+    if 'subcategory' in request.form:
+        subcategory=request.form['subcategory']
+    else :
+        subcategory=session['subcategory']
+    max_price=request.form['max_price']
+    
+    return redirect(url_for('user_page',selected_subcategory=subcategory,max_price=max_price)) 
 
 @app.route("/user_page")
 @login_required
 def user_page():
     category = request.args.get('category')
-    if category == 'user_ads':
-        all_ads = current_user.ads
-        message="Вашите обяви"
-    elif category == 'favorite_user_ads':
-        all_ads = current_user.favorite_adds
-        message="Вашите любими обяви"
-    elif category:
-        all_ads = db.session.query(models.BaseAdd).filter_by(category_type=category)
-        message=f"Обяви в категория : {category} "
+    subcategory = request.args.get('selected_subcategory')
+    max_price = request.args.get('max_price')
+    
+    kwargs = filter_functions.category_filter(subcategory, category, current_user)
+    
+    if not session['max_price']:
+        session['max_price'] = 0
+
+    if max_price:
+        ads = kwargs['all_ads']
+        kwargs['all_ads'] = filter_functions.price_filter(ads, max_price)
+    elif subcategory:
+        ads = kwargs['all_ads']
+        ads = [ad.id for ad in ads if ad.subcategory_type == subcategory]
+        session['ads'] = json.dumps(ads)
+        session['subcategory']=subcategory
     else:
-        message="Всички обяви"
-        all_ads = models.BaseAdd.query.all()
-    return render_template('user_page.html', all_ads=all_ads,message=message)
+        ads = kwargs['all_ads']
+        ads = [ad.id for ad in ads]
+        session['ads'] = json.dumps(ads)
+
+    print(kwargs)
+    return render_template('user_page.html', **kwargs)
 
 @app.route("/add_detail/<add_id>")
 def add_page(add_id: int): 
@@ -88,7 +106,11 @@ def delete_add(add_id):
     if request.form.get('_method') != 'DELETE':
         return abort(400, 'Invalid method')
     
-    add_functions.delete_add(add_id)
+    try:
+        add_functions.delete_add(add_id)
+    except ValueError as e:
+        redirect(url_for('user_page'))
+
     return redirect(url_for('user_page'))
 
 @app.route("/to_sell")
@@ -109,16 +131,11 @@ def login_close():
 
 @app.route('/sell', methods=['POST','GET'])
 def sell_form():
-    categories = ['Електроника', 'Облекло','Превозни средства','Работа','Недвижими имоти','Спорт']
 
-    subcategories = {
-        'Електроника': ['Компютри', 'Таблети', 'Аудио техника', 'Телефони', 'Телевизори', 'Домашна техника'],
-        'Облекло': ['Дамско', 'Мъжко'],
-        'Превозни средства': ['Автомобили', 'Мотоциклети'],
-        'Работа': ['Пълно работно време', 'Непълно работно време', 'Работа от вкъщи'],
-        'Недвижими имоти': ['Апартаменти', 'Къщи'],
-        'Спорт': ['Фитнес и тренировки', 'Спортни съоръжения', 'Велосипеди'],
-    }
+    json_data=other_functions.load_from_json()
+
+    categories = json_data['categories']
+    subcategories = json_data['subcategories']
 
     cities = ['София', 'Пловдив', 'Варна', 'Бургас', 'Русе', 'Стара Загора', 'Плевен', 'Велико Търново', 'Смолян']
 
@@ -157,6 +174,7 @@ def save_add():
     if not add_id:
         abort(400, 'Invalid request')
 
+
     add = models.BaseAdd.query.get(add_id)
 
 
@@ -165,7 +183,11 @@ def save_add():
 
     add.saves+=1
 
-    current_user.add_favorite_advert(add)
+    try: 
+        current_user.add_favorite_advert(add)
+    except IntegrityError as e:
+        db.session.rollback()
+        render_template('ad_details.html', ad=add)
 
     return render_template('ad_details.html', ad=add)
 
@@ -177,7 +199,7 @@ def login_action():
         return abort(400, 'Invalid method')
 
     email = request.form['email']
-    password_hash = f_hash(request.form['password'])
+    password_hash = other_functions.f_hash(request.form['password'])
     
     current_local_user = models.User.query.filter_by(email=email).first()
 
@@ -197,7 +219,7 @@ def register_action_action():
         return redirect(url_for('register', message='Invalid method'))
 
     user_name = request.form['username'].lower()
-    password_hash = f_hash(request.form['password'])
+    password_hash = other_functions.f_hash(request.form['password'])
     email = request.form['email'].lower()
     new_user = models.User(name=user_name, email=email, password_hash=password_hash)
 
@@ -217,21 +239,21 @@ def register_action_action():
 def search():
     if request.method == 'POST':
         search_query = request.form.get('search_query')
-        print(search_query)
-        if search_query:
-            all_ads = models.BaseAdd.query.filter(or_(models.BaseAdd.title.ilike(f"%{search_query}%"),
-                                                       models.BaseAdd.content.ilike(f"%{search_query}%"))).all()
+        all_ads = models.BaseAdd.query.filter(or_(models.BaseAdd.title.ilike(f"%{search_query}%"),
+                                                    models.BaseAdd.content.ilike(f"%{search_query}%"))).all()
+        if all_ads :
             result_string = f"Резултати за '{search_query}'"
             if current_user.is_authenticated: 
-                return render_template('user_page.html', all_ads=all_ads,category_title=result_string)
+                return render_template('user_page.html', all_ads=all_ads,message=result_string)
             else :
-                return render_template('home_page.html', all_ads=all_ads,category_title=result_string)
-    
-    result_string = f"Няма резултати за '{search_query}'"
+                return render_template('home_page.html', all_ads=all_ads,messsage=result_string)
+        else :
+            result_string = f"Няма резултати за '{search_query}'"
+
     if current_user : 
-         return render_template('user_page.html', category_title=result_string)
+        return render_template('user_page.html', message=result_string)
     else :
-        return render_template('home_page.html', category_title=result_string)
+        return render_template('home_page.html', message=result_string)
 
 
 @login_manager.user_loader

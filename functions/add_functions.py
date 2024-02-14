@@ -70,35 +70,35 @@ def create_add(request,current_user):
         type_pc=request.form['type_PC']
         ad = models.Computer(**ad_params,pc_type=type_pc)
     elif(subcategory == 'Таблети'):
-        reader_type=request.form['type_PC']
-        ad = models.Tablet(ad_params,reader_type=reader_type)
+        reader_type=request.form['type_tablet']
+        ad = models.Tablet(**ad_params,reader_type=reader_type)
     elif subcategory == 'Телефони':
         brand = request.form['brand']
-        ad = models.Phone(ad_params,phone_brand=brand) 
+        ad = models.Phone(**ad_params,phone_brand=brand) 
     elif subcategory == 'Аудио техника':
         type = request.form['brand']
-        ad = models.AudioEquipment(ad_params,type=type) 
+        ad = models.AudioEquipment(**ad_params,type=type) 
     elif subcategory == 'Телевизори':
         inches = request.form['brand']
-        ad = models.Television(ad_params, inches) 
+        ad = models.Television(**ad_params, inches=inches) 
     elif subcategory == 'Домашна техника':
         house_appliance_type = request.form['house_appliance_type']
-        ad = models.HouseholdAppliance(ad_params, house_appliance_type) 
+        ad = models.HouseholdAppliance(**ad_params, house_appliance_type=house_appliance_type) 
     elif subcategory == 'Дамско':
-        women_clothing_type = request.form['women_clothing_types ']
-        ad = models.WomenClothing(ad_params, women_clothing_type) 
+        women_clothing_type = request.form['women_clothing_type']
+        ad = models.WomenClothing(**ad_params, women_clothing_type=women_clothing_type) 
     elif subcategory == 'Мъжко':
         men_clothing_type = request.form['men_clothing_type']
-        ad = models.MenClothing(ad_params, men_clothing_type) 
+        ad = models.MenClothing(**ad_params, men_clothing_type=men_clothing_type) 
     elif category == 'Работа':
         sector=request.form['work_sector']
         salary =request.form['salary']
         if subcategory == 'Пълно работно време':
-            ad = models.FullTime(ad_params, sector,salary) 
+            ad = models.FullTime(**ad_params, sector=sector,salary=salary) 
         elif subcategory == 'Непълно работно време':
-            ad = models.PartTime(ad_params, sector,salary) 
+            ad = models.PartTime(**ad_params, sector=sector,salary=salary) 
         else :
-            ad = models.WorkFromHome(ad_params, sector,salary) 
+            ad = models.WorkFromHome(**ad_params, sector=sector,salary=salary) 
     elif category == 'Недвижими имоти':
         square_meters = request.form['square_meters']
         construction_year = request.form['construction_year']
@@ -115,15 +115,15 @@ def create_add(request,current_user):
         if subcategory == 'Апартаменти':
             apartment_type = request.form['apartment_type']
             floor = request.form['floor']
-            ad = models.ApartmentAdd(ad_params, apartment_type=apartment_type,floor=floor)
+            ad = models.ApartmentAdd(**ad_params, apartment_type=apartment_type,floor=floor)
         if subcategory == 'Къщи':
             house_height = request.form['house_height']
-            ad = models.HouseAdd(ad_params, floors_height=house_height)
+            ad = models.HouseAdd(**ad_params, floors_height=house_height)
     elif category == 'Спорт':
         sport_type=request.form['sport_type']
         if subcategory == 'Велосипеди':
             wheels_inches = request.form["wheels_inches"]
-            ad = models.Bicycles(ad_params,sport_type=sport_type , wheels_inches=wheels_inches)
+            ad = models.Bicycles(**ad_params,sport_type=sport_type , wheels_inches=wheels_inches)
     elif category == 'Превозни средства':
         vehicle_brand = request.form['vehicle_brand']
         year = request.form['year']
@@ -144,15 +144,15 @@ def create_add(request,current_user):
                 'engine': engine,
                 'transmission': transmission,
             }
-            ad = models.Motorcycle(ad_params,coupe=coupe,model = model,engine = engine,transmission = transmission)
+            ad = models.Motorcycle(**ad_params,coupe=coupe,model = model,engine = engine,transmission = transmission)
         else :
             motor_type=request.form['motorcycle_type']
-            ad = models.Motorcycle(ad_params,motor_type=motor_type)
+            ad = models.Motorcycle(**ad_params,motor_type=motor_type)
 
     return ad
 
-def get_add_by_id(add_id):
-    return models.db.session.query(models.BaseAdd).get(add_id)
+def get_add_by_id(ad_id):
+    return models.db.session.query(models.BaseAdd).get(ad_id)
 
 def delete_add(add_id):
     add = get_add_by_id(add_id)

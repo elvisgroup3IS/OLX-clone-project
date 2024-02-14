@@ -12,17 +12,7 @@
 {% endblock %}
 
 {% block addlist %}
-    <ul id="adList">
-        {% for ad in all_ads %}
-            <li class="adItemL">
-                <a href="{{ url_for('add_page',add_id=ad.id) }}">
-                    <h3 class="adTitleL">{{ ad.title }}</h3>
-                        <img class="adImageL" src="{{ url_for('static', filename='addpictures/' + ad.photo1) }}" alt="Обява 1">
-                    <p class="adInfoL">Добавена на: {{ ad.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</p>
-                </a>
-            </li>
-        {% endfor %}
-    </ul>
+    {% include 'ad_list.html' %}
 {% endblock %}
 
 
