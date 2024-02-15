@@ -612,7 +612,9 @@ footer .bottom .right{
     border-radius: 5px;
 }
 
-
+.hidden {
+    display: none;
+}
 
 /* category popup */
 #categoryPopup{

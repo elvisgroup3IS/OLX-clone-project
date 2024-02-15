@@ -31,8 +31,13 @@
             {% endfor %}
         </select>
         {% endif %}
-        <input class="sell_inp"  type="text" id="price" name="max_price" placeholder="Максимална цена." required>   
-        <button id="sellBtn" type="submit" name="get_subcategory" value='{{ subcategory }}'  >Приложи</button>
+            <input class="sell_inp"  type="text" id="price" name="max_price" placeholder="Максимална цена." required>  
+        {% if  selected_category %}
+            <button id="sellBtn" type="submit" name="get_category" value='{{ selected_category }}'  >Приложи</button>
+        {% endif %}
+        {% if not selected_category %}
+            <button id="sellBtn" type="submit" name="get_subcategory" value='{{ subcategory }}'  >Приложи</button>
+        {% endif %}
     </form>
     </div>
 

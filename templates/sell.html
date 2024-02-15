@@ -37,14 +37,14 @@
             <input class="sell_inp"  type="text" id="title" name="title" placeholder="Например: iPhone 11 с гаранция" required minlength="12" maxlength="70">
 
             <label for="photos">Снимки* </label>
-            <input class="sell_inp"  type="file" id="photos" name="photo1" accept="image/*">
+            <input class="sell_inp"  type="file" id="photos" name="photo1" accept="image/*" required>
 
-            <input class="sell_inp"  type="file" id="photo1" name="photo2" accept="image/*">
+            <input class="sell_inp"  type="file" id="photo1" name="photo2" accept="image/*" required>
 
-            <input class="sell_inp"  type="file" id="photo2" name="photo3" accept="image/*">
+            <input class="sell_inp"  type="file" id="photo2" name="photo3" accept="image/*" required>
             
-            <input class="selected_subcategory" type="text" name="subcategory" value="{{ selected_subcategory }}">
-            <input class="selected_subcategory" type="text" name="category" value="{{ selected_category }}">
+            <input class="hidden" type="text" name="subcategory" value="{{ selected_subcategory }}" required title="Моля изберете подкатегория">
+            <input class="hidden" type="text" name="category" value="{{ selected_category }}" required>
 
             <input class="sell_inp"  type="phone" name="phone" placeholder="Добави телефон за връзка" >
 
@@ -173,7 +173,7 @@
                 {% endfor %}
             </select>
             <label for="year">Година на пройзводсвто:</label>
-            <input class="sell_inp"  type="date" name="year" >
+            <input class="sell_inp"  type="date" name="year"  required>
             <input class="sell_inp"  name="power" placeholder="Мощност">
             {% endif %}
 
@@ -262,7 +262,7 @@
 
             {% if selected_category == 'Недвижими имоти' %}
                 <input class="sell_inp"  type="number"  name="square_meters" placeholder="Квадратура (кв.м)" >
-                <input class="sell_inp"  type="date"  name="construction_year" placeholder="Година на построяване" >
+                <input class="sell_inp"  type="date"  name="construction_year" placeholder="Година на построяване"  required>
         
                 <select class="sell_inp" name="furnishing" required>
                     {% for subcategory, option in {
@@ -274,8 +274,8 @@
                     {% endfor %}
                 </select>
 
-                <label for="furnishing">Вид отопление:</label>
-                <select class="sell_inp" name="furnishing" required>
+                <label for="heating">Вид отопление:</label>
+                <select class="sell_inp" name="heating" required>
                     {% for subcategory, option in {
                         'central_heating': 'Централно отопление',
                         'electric_heating': 'Електрическо отопление',

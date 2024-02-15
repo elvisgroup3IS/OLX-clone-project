@@ -103,9 +103,9 @@ class Vehicle(BaseAdd):
 
 class Car(Vehicle):
     __tablename__ = 'car_adds'
-    coupe = db.Column(db.Boolean)
-    model = db.Column(db.String(100))
-    engine = db.Column(db.String(100))
+    coupe = db.Column(db.String(50))
+    model = db.Column(db.String(50))
+    engine = db.Column(db.String(50))
     transmission = db.Column(db.String(50))
 
 class Motorcycle(Vehicle):

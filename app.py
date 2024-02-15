@@ -51,9 +51,11 @@ def register(message=None):
 
 @app.route("/filter",methods=['POST'])
 def filter():
+    if 'get_category' in request.form:
+        session['subcategory']=None
     if 'subcategory' in request.form:
         subcategory=request.form['subcategory']
-    else :
+    elif 'subcategory' in session :
         subcategory=session['subcategory']
     max_price=request.form['max_price']
     
@@ -68,17 +70,22 @@ def user_page():
     
     kwargs = filter_functions.category_filter(subcategory, category, current_user)
     
-    if not session['max_price']:
-        session['max_price'] = 0
+
 
     if max_price:
         ads = kwargs['all_ads']
         kwargs['all_ads'] = filter_functions.price_filter(ads, max_price)
     elif subcategory:
         ads = kwargs['all_ads']
-        ads = [ad.id for ad in ads if ad.subcategory_type == subcategory]
-        session['ads'] = json.dumps(ads)
-        session['subcategory']=subcategory
+        if category :
+            ads = [ad.id for ad in ads if ad.category_type == category]
+            session['category']=category
+            session['ads'] = json.dumps(ads)
+        else:
+            ads = [ad.id for ad in ads if ad.subcategory_type == subcategory]
+            session['ads'] = json.dumps(ads)
+            session['subcategory']=subcategory
+
     else:
         ads = kwargs['all_ads']
         ads = [ad.id for ad in ads]
@@ -103,8 +110,8 @@ def add_page(add_id: int):
 @app.route('/add_delete/<add_id>',methods=['POST', 'DELETE'])
 @login_required
 def delete_add(add_id):
-    if request.form.get('_method') != 'DELETE':
-        return abort(400, 'Invalid method')
+    # if request.form.get('_method') != 'DELETE':
+    #     return abort(400, 'Invalid method')
     
     try:
         add_functions.delete_add(add_id)
