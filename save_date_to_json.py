@@ -11,8 +11,10 @@ subcategories = {
     'Спорт': ['Фитнес и тренировки', 'Спортни съоръжения', 'Велосипеди'],
 }
 
+cities = ['София', 'Пловдив', 'Варна', 'Бургас', 'Русе', 'Стара Загора', 'Плевен', 'Велико Търново', 'Смолян']
+
 # Combine categories and subcategories into a single dictionary
-data = {'categories': categories, 'subcategories': subcategories}
+data = {'categories': categories, 'subcategories': subcategories,'cities': cities}
 
 # Convert the dictionary to JSON
 json_data = json.dumps(data, ensure_ascii=False, indent=2)

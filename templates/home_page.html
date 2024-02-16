@@ -15,6 +15,11 @@
     {% include 'ad_list.html' %}
 {% endblock %}
 
+{% block category_title %}
+    {% if message %}
+        <h2 id="categoryHeading">{{message}}</h2>
+    {% endif %}
+{% endblock %}
 
 
 {% block category_content %}

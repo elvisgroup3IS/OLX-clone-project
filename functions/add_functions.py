@@ -30,9 +30,9 @@ def add_recognize(ad):
         ad_subtype = models.PartTime.query.get(add_id)
     elif ad.subcategory_type == "Работа от вкъщи":
         ad_subtype = models.WorkFromHome.query.get(add_id)
-    elif ad.subcategory_type == "Апартаменти за продажба":
+    elif ad.subcategory_type == "Апартаменти":
         ad_subtype = models.ApartmentAdd.query.get(add_id)
-    elif ad.subcategory_type == "Къщи за продажба":
+    elif ad.subcategory_type == "Къщи":
         ad_subtype = models.HouseAdd.query.get(add_id)
     elif ad.subcategory_type == "Велосипеди":
         ad_subtype = models.Bicycles.query.get(add_id)
@@ -76,10 +76,10 @@ def create_add(request,current_user):
         brand = request.form['brand']
         ad = models.Phone(**ad_params,phone_brand=brand) 
     elif subcategory == 'Аудио техника':
-        type = request.form['brand']
+        type = request.form['type_aoudio']
         ad = models.AudioEquipment(**ad_params,type=type) 
     elif subcategory == 'Телевизори':
-        inches = request.form['brand']
+        inches = request.form['inches']
         ad = models.Television(**ad_params, inches=inches) 
     elif subcategory == 'Домашна техника':
         house_appliance_type = request.form['house_appliance_type']

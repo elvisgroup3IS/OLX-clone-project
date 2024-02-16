@@ -54,6 +54,27 @@
             <label for="price">Цена* </label>
             <input class="sell_inp"  type="text" id="price" name="price" placeholder="Добави цена в лв." required>
             
+            <label for="condition">Състояние* </label>
+            <select class="sell_inp" name="condition" required>
+                {% for subcategory, option in {
+                    'Ново': 'Ново',
+                    'Използвано': 'Използвано',
+                    'Използвано като ново': 'Използвано като ново',
+                }.items() %}
+                    <option value="{{ subcategory }}">{{ option }}</option>
+                {% endfor %}
+            </select>
+
+            <label for="condition">От кой се поема доставката </label>
+            <select class="sell_inp" name="delivery_action" required>
+                {% for subcategory, option in {
+                    'Куповача': 'Куповача',
+                    'Продавача': 'Продавача',
+                }.items() %}
+                    <option value="{{ subcategory }}">{{ option }}</option>
+                {% endfor %}
+            </select>
+
             <label for="cities">Избери град:</label>
             <select id="cities" name="location">
                 {% for city in cities %}
@@ -135,6 +156,7 @@
                 {% endfor %}
             </select>
             {% endif %}
+            
 
 
             {% if selected_subcategory == 'Мъжко' %}
@@ -181,11 +203,11 @@
             <label for="coupe_type">Купе:</label>
             <select class="sell_inp" name="coupe_type" required>
                 {% for subcategory, option in  {
-                    'two_door': 'Двуврати',
-                    'three_door': 'Триврати',
-                    'four_door': 'Четириврати',
-                    'convertible': 'Кабрио',
-                    'grand_coupe': 'Голям купе',
+                    'Двуврати': 'Двуврати',
+                    'Триврати': 'Триврати',
+                    'Четириврати': 'Четириврати',
+                    'Кабрио': 'Кабрио',
+                    'Голямо купе': 'Голямо купе',
                 }.items() %}
                     <option value="{{ subcategory }}">{{ option }}</option>
                 {% endfor %}
@@ -194,11 +216,11 @@
             <label for="engine_type">Двигател:</label>
             <select class="sell_inp" name="engine_type" required>
                 {% for subcategory, option in  {
-                    'gasoline': 'Бензинов',
-                    'diesel': 'Дизелов',
-                    'hybrid': 'Хибриден',
-                    'electric': 'Електрически',
-                    'natural_gas': 'На природен газ',
+                    'Бензинов': 'Бензинов',
+                    'Дизелов': 'Дизелов',
+                    'Хибриден': 'Хибриден',
+                    'Електрически': 'Електрически',
+                    'На природен газ': 'На природен газ',
                 }.items() %}
                     <option value="{{ subcategory }}">{{ option }}</option>
                 {% endfor %}
@@ -207,9 +229,9 @@
             <label for="transmission_type">Трансмисия:</label>
             <select class="sell_inp" name="transmission_type" required>
                 {% for subcategory, option in  {
-                    'automatic': 'Автоматична',
-                    'manual': 'Ръчна',
-                    'semi_automatic': 'Полуавтоматична',
+                    'Автоматична': 'Автоматична',
+                    'Ръчна': 'Ръчна',
+                    'Полуавтоматична': 'Полуавтоматична',
                 }.items() %}
                     <option value="{{ subcategory }}">{{ option }}</option>
                 {% endfor %}
@@ -222,13 +244,13 @@
             <label for="motorcycle_type">Тип:</label>
             <select class="sell_inp" name="motorcycle_type" required>
                 {% for subcategory, option in {
-                    'tourer': 'Туристически',
-                    'sport': 'Спортен',
-                    'cruiser': 'Крузър',
-                    'offroad': 'Ендуро',
-                    'scooter': 'Скутер',
-                    'chopper': 'Чопър',
-                    'custom': 'Къстъм',
+                    'Туристически': 'Туристически',
+                    'Спортен': 'Спортен',
+                    'Крузър': 'Крузър',
+                    'Ендуро': 'Ендуро',
+                    'Скутер': 'Скутер',
+                    'Чопър': 'Чопър',
+                    'Къстъм': 'Къстъм',
                 }.items() %}
                     <option value="{{ subcategory }}">{{ option }}</option>
                 {% endfor %}
@@ -338,7 +360,6 @@
                 {% if selected_subcategory == 'Къщи' %}
                     <input class="sell_inp"  type="number"  name="house_height" placeholder="Брой етажи" >
                 {% endif %}
-
             <input  type="submit" value="Публикувай обява">
             
         </form>

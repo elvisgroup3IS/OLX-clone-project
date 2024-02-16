@@ -5,7 +5,7 @@
             <div class="dropdown">
                 <button id="signinBtn" class="showSignoutBtnHover">{{session['username']}}</button>
                 <div class="dropdownContent" id="dropdownContent">
-                    <a href="{{ url_for('user_page', category='user_ads') }}" id="myAds">Мойте обяви</a>
+                    <a href="{{ url_for('user_page', category='user_ads') }}" id="myAds">Моите обяви</a>
                     <a href="{{ url_for('user_page', category='favorite_user_ads') }}" id="favorites">Любими обяви</a>
                     <a href="{{ url_for('logout') }}" id="signoutBtn">Излез от профиля</a>
                 </div>
@@ -22,23 +22,34 @@
     {% endif %}
     <div id="filterPopupContainer">
     <form method="POST" action='/filter'>
-        {% if selected_category %}
-        <label for="subcategory">Подкатегория:</label>
-        <select class="sell_inp"  id="subcategory" name="subcategory" onchange="this.form.submit()">
-            <option value="" {% if not selected_subcategory %}selected{% endif %}>Избери подкатегория</option>
-            {% for subcategory in subcategories[selected_category] %}
-                <option value="{{ subcategory }}" {% if selected_subcategory == subcategory %}selected{% endif %}>{{ subcategory }}</option>
-            {% endfor %}
-        </select>
+        {% if not is_filtered %}
+            {% if selected_category %}
+            <label for="subcategory">Подкатегория:</label>
+            <select class="sell_inp"  id="subcategory" name="subcategory">
+                <option value="" {% if not selected_subcategory %}selected{% endif %}>Избери подкатегория</option>
+                {% for subcategory in subcategories[selected_category] %}
+                    <option value="{{ subcategory }}" {% if selected_subcategory == subcategory %}selected{% endif %}>{{ subcategory }}</option>
+                {% endfor %}
+            </select>
+            {% endif %}
+                {% if message != 'Вашите любими обяви'  and message != 'Вашите обяви' %}
+                    <input class="sell_inp"  type="text" id="price" name="max_price" placeholder="Максимална цена.">  
+                    <label for="cities">Избери град:</label>
+                    <select id="cities" name="location">
+                        <option value="default">Избери къде</option>
+                        {% for city in cities %}
+                            <option value="{{ city }}">{{ city }}</option>
+                        {% endfor %}
+                    </select>
+                    <button id="sellBtn" type="submit">Приложи</button>
         {% endif %}
-            <input class="sell_inp"  type="text" id="price" name="max_price" placeholder="Максимална цена." required>  
-        {% if  selected_category %}
-            <button id="sellBtn" type="submit" name="get_category" value='{{ selected_category }}'  >Приложи</button>
-        {% endif %}
-        {% if not selected_category %}
-            <button id="sellBtn" type="submit" name="get_subcategory" value='{{ subcategory }}'  >Приложи</button>
         {% endif %}
     </form>
+    {% if is_filtered %}
+    <form method="POST" action='/clear_filters'>
+        <button id="sellBtn" type="submit" name="get_subcategory" value='clear' >Изчисти филтрите</button>
+    </form>
+    {% endif %}
     </div>
 
 {% endblock %}

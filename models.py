@@ -6,7 +6,6 @@ from sqlalchemy.orm import sessionmaker
 from flask_login import UserMixin
 from typing import Union
 
-
 class User(UserMixin, db.Model):
     __tablename__ = 'users'
 
@@ -17,6 +16,9 @@ class User(UserMixin, db.Model):
     ads = db.relationship('BaseAdd', back_populates='owner', lazy='dynamic', enable_typechecks=False)
     favorite_adds = db.relationship('BaseAdd', secondary='user_favorite_adds', backref='users')
 
+    def is_limit_by_category(self,subcategory):
+        category_ads=[ad for ad in self.ads if ad.subcategory_type == subcategory]
+        return  len(category_ads) >= 5        
 
     def add_favorite_advert(self, add: Union['BaseAdd', 'Computer', 'RealEstateAdd', 'Vehicle', 'ElectronicDevice', 'ClothingAdd', ...]) -> None:
         self.favorite_adds.append(add)

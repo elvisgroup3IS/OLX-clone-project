@@ -23,16 +23,32 @@
             <div class="inLeft" class="showAdDescription">
                 <p id="showAdDescriptionDesc">Описание: {{ ad.content }}</p>
             </div>
+            <div class="inLeft" class="showAdDescription">
+                {% if  ad.category_type == "Превозни стредства"  %}
+                    <p>Година: {{ ad.year}}</p>
+                    <p>Марка: {{ ad.vehicle_brand }}</p>
+                {% endif %}
+                {% if  ad.subcategory_type == "Автомобили"  %}
+                    <p>Модел: {{ ad.model }}</p>
+                    <p>Двигател: {{ ad.engine  }}</p>
+                    <p>Трансмисия: {{ ad.transmission  }}</p>
+                    <p>Купе: {{ ad.coupe  }}</p>
+                {% endif %}
+                {% if  ad.subcategory_type == "Мотоциклети"  %}
+                    <p>Тип: {{ ad.motor_type }}</p>
+                {% endif %}
+            </div>
         </div>
         <div class="right">
             <div class="inRight">
                 <div id="price"><p>Цена: {{ ad.item_price }} лв.</p></div>
                 <div class="sellerInfo">
-                    <h4>Контакт с продавача</h4>
+                    <h3><b>Контакт с продавача</b></h3>
                     <div id="sellerName">Име : {{ ad.contact_name }}</div>
                     <div id="sellerPhone">Телефон : {{ ad.phone }} </div>
                     <div id="addLocation">Местоположение : {{ ad.location }} </div>
-                    <div id="devAction">Доставка : {{ ad.delivery_action }} </div>
+                    <div id="devAction">Доставка се поема от: {{ ad.delivery_action }} </div>
+                    <div id="condition">Състояние : {{ ad.delivery_action }} </div>
                 </div>
                 {% if is_login %}
                     <div class="sellerInfo">
