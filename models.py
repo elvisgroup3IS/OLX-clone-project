@@ -80,6 +80,18 @@ user_favorite_adds = db.Table(
     db.Column('user_id', db.Integer, db.ForeignKey('users.id'), primary_key=True),
     db.Column('base_add_id', db.Integer, db.ForeignKey('base_add.id'), primary_key=True)
 )
+
+
+class Image(db.Model):
+    """
+    SQLAlchemy model representing Image data.
+    """
+    __tablename__='images'
+    id = db.Column(db.Integer, primary_key=True)
+    url = db.Column(db.String(255))
+    add_id = db.Column(db.Integer, db.ForeignKey('base_add.id'))
+    add = db.relationship('BaseAdd', backref='images_add')
+
 class RealEstateAdd(BaseAdd):
     """
     SQLAlchemy model representing real estate advertisement data.
