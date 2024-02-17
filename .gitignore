@@ -21,4 +21,8 @@ __pycache__/
 
 migrations
 
+pylint_test
+
+save_data_to_json.py
+
 venv/

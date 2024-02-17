@@ -26,7 +26,7 @@
             {% if selected_category %}
             <label for="subcategory">Подкатегория:</label>
             <select class="sell_inp"  id="subcategory" name="subcategory">
-                <option value="" {% if not selected_subcategory %}selected{% endif %}>Избери подкатегория</option>
+                <option value="not_selected" {% if not selected_subcategory %}selected{% endif %}>Избери подкатегория</option>
                 {% for subcategory in subcategories[selected_category] %}
                     <option value="{{ subcategory }}" {% if selected_subcategory == subcategory %}selected{% endif %}>{{ subcategory }}</option>
                 {% endfor %}
@@ -40,8 +40,8 @@
                         {% for city in cities %}
                             <option value="{{ city }}">{{ city }}</option>
                         {% endfor %}
-                    </select>
-                    <button id="sellBtn" type="submit">Приложи</button>
+                    </select>  
+                    <button id="sellBtn" type="submit" name="category_selected" value="{{message}}">Приложи</button>
         {% endif %}
         {% endif %}
     </form>

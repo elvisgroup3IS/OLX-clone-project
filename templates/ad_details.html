@@ -24,9 +24,21 @@
                 <p id="showAdDescriptionDesc">Описание: {{ ad.content }}</p>
             </div>
             <div class="inLeft" class="showAdDescription">
-                {% if  ad.category_type == "Превозни стредства"  %}
+                {% if  ad.category_type == "Недвижими имоти"  %}
+                <p>Година на построяване: {{ ad.construction_year }}</p>
+                <p>Квадратура: {{ ad.square_meters }} кв.м</p>
+                <p>Отопление: {{ ad.heating }}</p>
+                {% endif %}
+                {% if ad.subcategory_type == "Апартаменти"  %}
+                <p>На етаж: {{ ad.floor }}</p>
+                {% endif %}
+                {% if ad.subcategory_type == "Къщи"  %}
+                <p>Етажи: {{ ad.floors_height }}</p>
+                {% endif %}
+                {% if ad.category_type ==  "Превозни средства"  %}
                     <p>Година: {{ ad.year}}</p>
                     <p>Марка: {{ ad.vehicle_brand }}</p>
+                    <p>Мощност: {{ ad.power }}</p>
                 {% endif %}
                 {% if  ad.subcategory_type == "Автомобили"  %}
                     <p>Модел: {{ ad.model }}</p>
@@ -36,6 +48,14 @@
                 {% endif %}
                 {% if  ad.subcategory_type == "Мотоциклети"  %}
                     <p>Тип: {{ ad.motor_type }}</p>
+                {% endif %}
+                {% if  ad.category_type == "Работа"  %}
+                    <p>Сектор: {{ ad.sector }}</p>
+                    <p>Заплата: {{ ad.salary }}</p>
+                {% endif %}
+                {% if  ad.sucategory_type == "Колелета"  %}
+                    <p>Сектор: {{ ad.sector }}</p>
+                    <p>Заплата: {{ ad.salary }}</p>
                 {% endif %}
             </div>
         </div>
@@ -48,7 +68,7 @@
                     <div id="sellerPhone">Телефон : {{ ad.phone }} </div>
                     <div id="addLocation">Местоположение : {{ ad.location }} </div>
                     <div id="devAction">Доставка се поема от: {{ ad.delivery_action }} </div>
-                    <div id="condition">Състояние : {{ ad.delivery_action }} </div>
+                    <div id="condition">Състояние : {{ ad.condition }} </div>
                 </div>
                 {% if is_login %}
                     <div class="sellerInfo">

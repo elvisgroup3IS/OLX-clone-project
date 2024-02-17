@@ -1,9 +1,8 @@
-"""This is my route app module"""
-import json
+"""This is route app module"""
 from sqlalchemy.exc import IntegrityError
 from flask_login import LoginManager , login_user, logout_user, login_required, current_user
-from flask import render_template,redirect,url_for,request,session,abort,Response
-from functions import other_functions, filter_functions, add_functions
+from flask import render_template,redirect,url_for,request,abort,Response
+from functions import other_functions, filter_functions, add_functions,user_functions
 from setup import app,db
 import models
 
@@ -17,7 +16,6 @@ def home():
     """
     Renders the home page with advertisements.
     """
-
     logout()
     category = request.args.get('category')
 
@@ -68,16 +66,26 @@ def filter_ads():
     """
     Redirect user_page route with filter kwargs to filter ads.
     """
-    get_category_key,subcategory_key = 'get_category','subcategory'
+    subcategory_key = 'subcategory'
 
+    categories=other_functions.load_from_json()
+    selected_category=request.form['category_selected']
+    substring = selected_category.split(":")[-1].strip()
 
-    if get_category_key in request.form:
-        session[subcategory_key]=None
     if subcategory_key in request.form:
-        subcategory=request.form['subcategory']
-        ads=filter_functions.category_filter(subcategory=subcategory)['all_ads']
+        if request.form['subcategory'] != 'not_selected':
+            subcategory=request.form['subcategory']
+            ads=filter_functions.category_filter(subcategory=subcategory)['all_ads']
+        elif substring in categories['categories']:
+            ads=filter_functions.category_filter(category=substring)['all_ads']
+        else :
+            ads=filter_functions.category_filter()['all_ads']
+
+    elif substring in categories['categories']:
+        ads=filter_functions.category_filter(category=substring)['all_ads']
     else :
         ads=filter_functions.category_filter()['all_ads']
+
     max_price=request.form['max_price']
     if max_price != '':
         ads=filter_functions.price_filter(ads,max_price)
@@ -95,15 +103,11 @@ def user_page():
     Render user_page with filter adds and kwarg for next filter(subcategory).
     """
     category = request.args.get('category')
-    # subcategory = request.args.get('selected_subcategory')
-    # max_price = request.args.get('max_price')
-    # city=request.args.get('city')
-
-
+    ads_key='ads'
     is_filtred=request.args.get('is_filtered')
-    if 'ads' not in request.args:
+    if ads_key not in request.args:
         kwargs = filter_functions.category_filter(category=category, current_user=current_user)
-    elif 'ads' in request.args:
+    elif ads_key in request.args:
         ads=request.args.get('ads')
         kwargs={'all_ads':ads,'is_filtred':is_filtred}
     elif not category :
@@ -198,7 +202,7 @@ def sell_action():
     if current_user.is_limit_by_category(subcategory) :
         abort(400, 'Превишили сте лимита в тази категория , моля върнете се и изберете друга.')
 
-    ad=add_functions.create_add(request,current_user)
+    ad=add_functions.create_add(request.form,current_user)
     photos=[ad.photo1,ad.photo2,ad.photo3]
     db.session.close()
     images = [models.Image(url=photo,add_id=ad.id) for photo in photos]
@@ -247,7 +251,7 @@ def login_action():
     email = request.form['email']
     password_hash = other_functions.f_hash(request.form['password'])
 
-    current_local_user = models.User.query.filter_by(email=email).first()
+    current_local_user = user_functions.search_for_user(email=email)
 
     if current_local_user and current_local_user.password_hash == password_hash:
         login_user(current_local_user)
@@ -269,7 +273,7 @@ def register_action_action():
     name_error_key="UNIQUE constraint failed: users.name"
     email_error_key="UNIQUE constraint failed: users."
     try:
-        models.save_user(new_user)
+        user_functions.save_user(new_user)
     except IntegrityError as e:
         db.session.rollback()
         if name_error_key in str(e):
@@ -294,11 +298,12 @@ def search():
         if all_ads:
             result_string = f"Резултати за '{search_query}'"
             template = 'user_page.html' if current_user.is_authenticated else 'home_page.html'
-            return render_template(template, all_ads=all_ads, message=result_string)
+            return render_template(template, all_ads=all_ads,
+                                    message=result_string,is_filtered=True)
 
     result_string = f"Няма резултати за '{search_query}'"
     template = 'user_page.html' if current_user.is_authenticated else 'home_page.html'
-    return render_template(template, message=result_string)
+    return render_template(template, message=result_string,is_filtered=True)
 
 
 @login_manager.user_loader

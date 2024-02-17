@@ -97,7 +97,7 @@
             {% endif %}
 
             {% if selected_subcategory == 'Аудио техника' %}
-            <select class="sell_inp"  name="type_aoudio" required>
+            <select class="sell_inp"  name="type_audio" required>
                 <option value="speakers">Тонколони и усилватели</option>
                 <option value="headphones">Слушалки</option>
                 <option value="accessories">Аксесоари</option>
@@ -261,16 +261,16 @@
             {% if selected_category == 'Работа' %}
             <select class="sell_inp" name="work_sector" required>
                 {% for subcategory, option in {
-                    'it': 'ИТ',
-                    'finance': 'Финанси',
-                    'healthcare': 'Здравеопазване',
-                    'education': 'Образование',
-                    'manufacturing': 'Производство',
-                    'retail': 'Търговия',
-                    'marketing': 'Маркетинг',
-                    'hospitality': 'Хотелиерство и ресторантьорство',
-                    'construction': 'Строителство',
-                    'transportation': 'Транспорт и логистика',
+                    'ИТ': 'ИТ',
+                    'Финанси': 'Финанси',
+                    'Здравеопазване': 'Здравеопазване',
+                    'Образование': 'Образование',
+                    'Производство': 'Производство',
+                    'Търговия': 'Търговия',
+                    'Маркетинг': 'Маркетинг',
+                    'Хотелиерство и ресторантьорство': 'Хотелиерство и ресторантьорство',
+                    'Строителство': 'Строителство',
+                    'Транспорт и логистика': 'Транспорт и логистика',
                 }.items() %}
                     <option value="{{ subcategory }}">{{ option }}</option>
                 {% endfor %}
@@ -299,13 +299,13 @@
                 <label for="heating">Вид отопление:</label>
                 <select class="sell_inp" name="heating" required>
                     {% for subcategory, option in {
-                        'central_heating': 'Централно отопление',
-                        'electric_heating': 'Електрическо отопление',
-                        'gas_heating': 'Газово отопление',
-                        'air_conditioning': 'Климатична инсталация',
-                        'fireplace': 'Камин',
-                        'underfloor_heating': 'Подово отопление',
-                        'other': 'Друг вид отопление',
+                        'Централно отопление': 'Централно отопление',
+                        'Електрическо отопление': 'Електрическо отопление',
+                        'Газово отопление': 'Газово отопление',
+                        'Климатична инсталация': 'Климатична инсталация',
+                        'Камин': 'Камин',
+                        'Подово отопление': 'Подово отопление',
+                        'Друг вид отопление': 'Друг вид отопление',
                     }.items() %}
                         <option value="{{ subcategory }}">{{ option }}</option>
                     {% endfor %}
