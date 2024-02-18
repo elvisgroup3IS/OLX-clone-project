@@ -68,7 +68,7 @@
             <label for="condition">От кой се поема доставката </label>
             <select class="sell_inp" name="delivery_action" required>
                 {% for subcategory, option in {
-                    'Куповача': 'Куповача',
+                    'Купувача': 'Купувача',
                     'Продавача': 'Продавача',
                 }.items() %}
                     <option value="{{ subcategory }}">{{ option }}</option>

@@ -1,7 +1,7 @@
 """This is route app module"""
 from sqlalchemy.exc import IntegrityError
 from flask_login import LoginManager , login_user, logout_user, login_required, current_user
-from flask import render_template,redirect,url_for,request,abort,Response
+from flask import render_template,redirect,url_for,request,abort,Response,session
 from functions import other_functions, filter_functions, add_functions,user_functions
 from setup import app,db
 import models
@@ -43,6 +43,7 @@ def logout():
     """
     Loggout user then redirect the home page .
     """
+    session.clear()
     logout_user()
     return redirect(url_for('home'))
 
@@ -130,7 +131,7 @@ def add_page(add_id: int):
     else:
         is_saved=False
         is_current_user_add=False
-    params.update({'is_save':is_saved,'is_current_user_add':is_current_user_add})
+    params.update({'is_save':is_saved,'is_current_user_add':is_current_user_add,'is_login':is_login})
     return render_template('ad_details.html',**params)
 
 @app.route('/add_delete/<add_id>',methods=['POST'])
@@ -254,6 +255,7 @@ def login_action():
     current_local_user = user_functions.search_for_user(email=email)
 
     if current_local_user and current_local_user.password_hash == password_hash:
+        session['username']=current_local_user.name
         login_user(current_local_user)
         return redirect(url_for('user_page'))
 

@@ -107,7 +107,7 @@ def create_electronic_ad(ad_params: Dict[str, Union[str, int]],
         ad = models.Tablet(**ad_params, reader_type=reader_type)
 
     elif ad_params['subcategory_type'] == keys[2]:
-        brand = form['brand']
+        brand = form['Phones']
         ad = models.Phone(**ad_params, phone_brand=brand)
 
     elif ad_params['subcategory_type'] == keys[3]:
@@ -119,7 +119,7 @@ def create_electronic_ad(ad_params: Dict[str, Union[str, int]],
         ad = models.Television(**ad_params, inches=inches)
 
     elif ad_params['subcategory_type'] == keys[5]:
-        house_appliance_type = form['house_appliance_type']
+        house_appliance_type = form['type_house_hold_appliance']
         ad = models.HouseholdAppliance(**ad_params, house_appliance_type=house_appliance_type)
 
     return ad
@@ -193,12 +193,12 @@ def create_sport_ad(ad_params, form):
     Creates a new sports-related advertisement based on the form data.
     """
     sport_type = form['sport_type']
-    keys='Велосипеди',"Фитнес и тренировки","Спортни съоражения"
+    keys='Велосипеди',"Фитнес и тренировки","Спортни съоръжения"
     if ad_params['subcategory_type'] == keys[0]:
         wheels_inches = form["wheels_inches"]
-        ad = models.Fitness(**ad_params, sport_type=sport_type, wheels_inches=wheels_inches)
+        ad = models.Bicycles(**ad_params, sport_type=sport_type, wheels_inches=wheels_inches)
     if ad_params['subcategory_type'] == keys[1]:
-        ad = models.Bicycles(**ad_params, sport_type=sport_type)
+        ad = models.Fitness(**ad_params, sport_type=sport_type)
     if ad_params['subcategory_type'] == keys[2]:
         ad = models.SportFacilities(**ad_params, sport_type=sport_type)
 
