@@ -1,6 +1,6 @@
 # OLX-clone-project
 
-Това е моят Olx-clone project.Проектът реализира уебсайт чрез Flask ,SQLAlchemy and Jinja Templates.
+Това е моят Olx-clone project.Проектът реализира уебсайт чрез Flask ,SQLAlchemy и Jinja Templates.
 
 ## Инсталация
 
