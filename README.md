@@ -1,23 +1,23 @@
 # OLX-clone-project
 
-Това е моят Olx-clone project.Проектът реализира уебсайт чрез Flask ,SQLAlchemy и Jinja Templates.
+This is my OLX clone project. It uses Flask, SQLAlchemy, and Jinja Templates to build a dynamic website.
 
-## Инсталация
+## Install
 
-1. Създаване на виртуална среда:
+1. Create a virtual environment:
 
     ```bash
     python -m venv .venv
     .venv/bin/activate
     ```
 
-2. Инсталация на небходимите пакети:
+2. Install dependencies:
 
     ```bash
     pip install -r requirements.txt
     ```
 
-3. Инициализиране на базата:
+3. Initialize the database:
 
     ```bash
     flask db init
@@ -25,7 +25,7 @@
     flask db upgrade
     ```
 
-## Използване
+## Usage
 
 ```bash
 Add-Content -Path ".env" -Value "SECRET_KEY='<yourSecretkey>'" 
@@ -35,4 +35,4 @@ Add-Content -Path ".env" -Value "SECRET_KEY='<yourSecretkey>'"
 ```bash
 python -m flask --app app.py run
 ```
-Последвайте * Running on {{http://XXX.X.X.X:XXXX}} 
+Click on * Running on {{http://XXX.X.X.X:XXXX}} 
